@@ -14,7 +14,7 @@ void Timer_Init(void)
 	TIM_TimeBaseInitStruct.TIM_CounterMode = TIM_CounterMode_Up;
 	// 10ms触发一次中断
 	TIM_TimeBaseInitStruct.TIM_Period = 1000-1;
-	TIM_TimeBaseInitStruct.TIM_Prescaler = 3600-1;
+	TIM_TimeBaseInitStruct.TIM_Prescaler = 720-1;
 	TIM_TimeBaseInitStruct.TIM_RepetitionCounter = 0;
 	TIM_TimeBaseInit(TIM3, &TIM_TimeBaseInitStruct);
 	

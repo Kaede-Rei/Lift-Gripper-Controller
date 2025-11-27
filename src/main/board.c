@@ -7,9 +7,12 @@ void board_init(void)
 	GPIO_SetBits(GPIOB, GPIO_Pin_1);
 		
     UART1_Init();
+    UART2_Init();
     Encoder_Init();
     Timer_Init();
     
+    Delay_ms(1000);
+
     printf("Board initialized!\r\n");
 }
 

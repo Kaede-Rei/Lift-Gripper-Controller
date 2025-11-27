@@ -1,5 +1,5 @@
 .\objects\uart.o: src\app\UART.c
-.\objects\uart.o: .\src\main\main.h
+.\objects\uart.o: src\app\UART.h
 .\objects\uart.o: .\lib\Start\stm32f10x.h
 .\objects\uart.o: .\lib\Start\core_cm3.h
 .\objects\uart.o: D:\Keil 5--C51\ARM\ARMCC\Bin\..\include\stdint.h
@@ -29,13 +29,6 @@
 .\objects\uart.o: .\lib\Library\stm32f10x_usart.h
 .\objects\uart.o: .\lib\Library\stm32f10x_wwdg.h
 .\objects\uart.o: .\lib\Library\misc.h
-.\objects\uart.o: D:\Keil 5--C51\ARM\ARMCC\Bin\..\include\stdio.h
-.\objects\uart.o: D:\Keil 5--C51\ARM\ARMCC\Bin\..\include\string.h
 .\objects\uart.o: D:\Keil 5--C51\ARM\ARMCC\Bin\..\include\stdlib.h
-.\objects\uart.o: .\src\main\board.h
-.\objects\uart.o: .\src\main\main.h
-.\objects\uart.o: .\src\app\UART.h
-.\objects\uart.o: .\src\app\Delay.h
-.\objects\uart.o: .\src\app\Encoder.h
-.\objects\uart.o: .\src\app\PID.h
-.\objects\uart.o: .\src\app\TIM.h
+.\objects\uart.o: D:\Keil 5--C51\ARM\ARMCC\Bin\..\include\string.h
+.\objects\uart.o: D:\Keil 5--C51\ARM\ARMCC\Bin\..\include\stdio.h

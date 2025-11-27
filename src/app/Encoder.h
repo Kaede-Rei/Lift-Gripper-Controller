@@ -4,15 +4,15 @@
 #include "main.h"
 
 
-#define ACTUAL_MAX_PULSE       15518     // Êµ¼Ê²âÁ¿µÄ×î´óÂö³åÊý
-#define ACTUAL_MAX_MM          2609      // ×î´óÐÐ³Ì1000mm
-#define ACTUAL_PULSE_PER_MM    37.48f   // Êµ¼ÊÂö³å/mm±È 
+#define ACTUAL_MAX_PULSE       15518     // Êµï¿½Ê²ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+#define ACTUAL_MAX_MM          2609      // ï¿½ï¿½ï¿½ï¿½Ð³ï¿½1000mm
+#define ACTUAL_PULSE_PER_MM    37.48f   // Êµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½/mmï¿½ï¿½ 
 
 #define MIN_STROKE 0         
 #define MAX_STROKE 1000  
 
-#define MIN_STROKE_PULSE       (int)(MIN_STROKE_MM * ACTUAL_PULSE_PER_MM)    // 776Âö³å
-#define MAX_STROKE_PULSE       (int)(MAX_STROKE_MM * ACTUAL_PULSE_PER_MM)    // 15518Âö³å
+#define MIN_STROKE_PULSE       (int)(MIN_STROKE_MM * ACTUAL_PULSE_PER_MM)    // 776ï¿½ï¿½ï¿½ï¿½
+#define MAX_STROKE_PULSE       (int)(MAX_STROKE_MM * ACTUAL_PULSE_PER_MM)    // 15518ï¿½ï¿½ï¿½ï¿½
 
 extern int current_position;  
 extern int target_position;  
