@@ -87,9 +87,11 @@ targets:
         - lib/Library
         - lib/Start
         - lib/User
-        - src/main
-        - src/app
         - RTE/_Target 1
+        - src/apl
+        - src/drvl
+        - src/hal
+        - src/srvl
       libList: []
     excludeList: []
     toolchain: AC5
