@@ -8,7 +8,6 @@ void board_init(void)
 		
     UART1_Init();
     UART2_Init();
-    Encoder_Init();
     Timer_Init();
     
     Delay_ms(1000);

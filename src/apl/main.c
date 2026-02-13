@@ -38,9 +38,6 @@ static void Motor_Down(void)
 int main(void)
 {
     board_init();
-    Encoder_Init();
-    UART1_Init();
-    UART2_Init();
 
     PID_Init(&position_pid, &speed_pid, 0.8f, 0.01f, 0.5f, 3.0f, 10.0f, 0.0f);
 
