@@ -6,141 +6,240 @@
 
 // ! ========================= 变 量 声 明 ========================= ! //
 
-#define CONSTRAIN(val, lo, hi) ((val) > (hi) ? (hi) : ((val) < (lo) ? (lo) : (val)))
+
 
 // ! ========================= 私 有 函 数 声 明 ========================= ! //
 
-static void _init(Pid* self);
-static void _set_pid(Pid* self, float p, float i, float d);
-static void _set_limit(Pid* self, float int_limit, float out_limit);
-static void _set_filter(Pid* self, float alpha, float int_threshold, float dead_zone);
-static float _calculate(Pid* self, float target, float actual, float dt_s);
+#define PID_ABS(x)              ((x) >= 0.0f ? (x) : -(x))
+#define PID_CLAMP(v, lo, hi)    ((v) > (hi) ? (hi) : ((v) < (lo) ? (lo) : (v)))
+
+static void _init(PID* pid, uint8_t mode, uint8_t features);
+static void _init_cfg(PID* pid, const pid_cfg_t* cfg);
+static void _set_gains(PID* pid, float kp, float ki, float kd);
+static void _set_params(PID* pid, float max_out, float integral_separation,
+    float dead_band, float diff_filter_alpha, float output_max_rate);
+static void _set_feedforward(PID* pid, float ff_value);
+static float _calculate(PID* pid, float target, float actual, float dt_s);
+static void _reset(PID* pid);
 
 // ! ========================= 接 口 函 数 实 现 ========================= ! //
 
 /**
- * @brief   创建 Pid 对象
- * @param   None
- * @retval  Pid 对象
+ * @brief   创建 PID 实例
+ * @return  PID 实例
  */
-Pid pid_create(void) {
-    Pid obj;
-    obj._p_ = obj._i_ = obj._d_ = 0.0f;
-    obj._output_ = 0.0f;
-    obj._integral_ = 0.0f;
-    obj._last_actual_ = 0.0f;
-    obj._last_diff_ = 0.0f;
-    obj._alpha_ = 1.0f;
-    obj._int_limit_ = 0.0f;
-    obj._out_limit_ = 0.0f;
-    obj._int_threshold_ = 0.0f;
-    obj._dead_zone_ = 0.0f;
-    obj.init = _init;
-    obj.set_pid = _set_pid;
-    obj.set_limit = _set_limit;
-    obj.set_filter = _set_filter;
-    obj.calculate = _calculate;
-    return obj;
+PID pid_create(void) {
+    PID pid;
+
+    pid.init = _init;
+    pid.init_cfg = _init_cfg;
+    pid.set_gains = _set_gains;
+    pid.set_params = _set_params;
+    pid.set_feedforward = _set_feedforward;
+    pid.calculate = _calculate;
+    pid.reset = _reset;
+
+    return pid;
 }
 
 // ! ========================= 私 有 函 数 实 现 ========================= ! //
 
 /**
- * @brief   初始化 PID
- * @param   self PID对象
- * @retval  None
+ * @brief   初始化 PID 控制器
+ * @param   pid      PID 实例指针
+ * @param   mode     PID 模式 (PID_MODE_xxx)
+ * @param   features 功能特性 (PID_FEAT_xxx 按位或)
  */
-static void _init(Pid* self) {
-    self->_p_ = 0.0f;
-    self->_i_ = 0.0f;
-    self->_d_ = 0.0f;
-    self->_output_ = 0.0f;
-    self->_integral_ = 0.0f;
-    self->_last_actual_ = 0.0f;
-    self->_last_diff_ = 0.0f;
-    self->_alpha_ = 1.0f;
-    self->_int_limit_ = 0.0f;
-    self->_out_limit_ = 0.0f;
-    self->_int_threshold_ = 0.0f;
-    self->_dead_zone_ = 0.0f;
+static void _init(PID* pid, uint8_t mode, uint8_t features) {
+    pid->mode_ = mode;
+    pid->features_ = features;
+
+    pid->kp_ = 0.0f;  pid->ki_ = 0.0f;  pid->kd_ = 0.0f;
+
+    pid->max_out_ = 0.0f;
+    pid->integral_separation_ = 0.0f;
+    pid->dead_band_ = 0.0f;
+    pid->diff_filter_alpha_ = 0.0f;
+    pid->output_max_rate_ = 0.0f;
+    pid->ff_value_ = 0.0f;
+
+    pid->output_ = 0.0f;
+    pid->integral_ = 0.0f;
+    pid->prev_err_ = 0.0f;
+
+    pid->_filtered_diff_ = 0.0f;
+    pid->_prev_output_ = 0.0f;
+    pid->_prev_measurement_ = 0.0f;
 }
 
 /**
- * @brief   设置 PID 参数
- * @param   self PID对象
- * @param   p 比例系数
- * @param   i 积分系数
- * @param   d 微分系数
- * @retval  None
+ * @brief   通过配置表初始化 PID 控制器
+ * @param   pid PID 实例指针
+ * @param   cfg 配置结构体指针
  */
-static void _set_pid(Pid* self, float p, float i, float d) {
-    self->_p_ = p;
-    self->_i_ = i;
-    self->_d_ = d;
+static void _init_cfg(PID* pid, const pid_cfg_t* cfg) {
+    _init(pid, cfg->mode, cfg->features);
+    pid->kp_ = cfg->kp;
+    pid->ki_ = cfg->ki;
+    pid->kd_ = cfg->kd;
+    pid->max_out_ = cfg->max_out;
+    pid->integral_separation_ = cfg->integral_separation;
+    pid->dead_band_ = cfg->dead_band;
+    pid->diff_filter_alpha_ = cfg->diff_filter_alpha;
+    pid->output_max_rate_ = cfg->output_max_rate;
 }
 
 /**
- * @brief   设置限幅
- * @param   self PID对象
- * @param   int_limit 积分限幅
- * @param   out_limit 输出限幅
- * @retval  None
+ * @brief   设置 PID 增益
  */
-static void _set_limit(Pid* self, float int_limit, float out_limit) {
-    self->_int_limit_ = int_limit;
-    self->_out_limit_ = out_limit;
+static void _set_gains(PID* pid, float kp, float ki, float kd) {
+    pid->kp_ = kp;
+    pid->ki_ = ki;
+    pid->kd_ = kd;
 }
 
 /**
- * @brief   设置滤波和其他参数
- * @param   self PID对象
- * @param   alpha 滤波系数(0-1)
- * @param   int_threshold 积分分离阈值
- * @param   dead_zone 获取不到区域
- * @retval  None
+ * @brief   设置高级参数
  */
-static void _set_filter(Pid* self, float alpha, float int_threshold, float dead_zone) {
-    self->_alpha_ = alpha;
-    self->_int_threshold_ = int_threshold;
-    self->_dead_zone_ = dead_zone;
+static void _set_params(PID* pid, float max_out, float integral_separation,
+    float dead_band, float diff_filter_alpha, float output_max_rate) {
+    pid->max_out_ = max_out;
+    pid->integral_separation_ = integral_separation;
+    pid->dead_band_ = dead_band;
+    pid->diff_filter_alpha_ = diff_filter_alpha;
+    pid->output_max_rate_ = output_max_rate;
+}
+
+/**
+ * @brief   设置前馈值
+ */
+static void _set_feedforward(PID* pid, float ff_value) {
+    pid->ff_value_ = ff_value;
 }
 
 /**
  * @brief   计算 PID 输出
- * @param   self PID对象
+ * @param   pid    PID 实例指针
  * @param   target 目标值
  * @param   actual 实际值
- * @param   dt_s 时间间隔(秒)
- * @retval  float 输出值
+ * @param   dt_s   时间间隔 (秒); 0 时积分离散累加, 微分项不计算
+ * @return  PID 输出值
  */
-static float _calculate(Pid* self, float target, float actual, float dt_s) {
-    if(dt_s <= 1e-6f) dt_s = 1e-6f;
-    else if(dt_s > 0.1f) dt_s = 0.1f;
-
+float _calculate(PID* pid, float target, float actual, float dt_s) {
     float err = target - actual;
-    if(err < self->_dead_zone_ && err > -self->_dead_zone_) {
-        self->_output_ = 0.0f;
-        return 0.0f;
+    uint8_t feat = pid->features_;
+    uint8_t mode = pid->mode_;
+
+    /* 死区 */
+    if((feat & PID_FEAT_DEADBAND) && PID_ABS(err) < pid->dead_band_) {
+        err = 0.0f;
     }
 
-    /* 微分项 (基于测量值求导, 避免目标突变) */
-    float diff = -(actual - self->_last_actual_) / dt_s;
-    self->_last_actual_ = actual;
-    float filtered = self->_alpha_ * diff + (1.0f - self->_alpha_) * self->_last_diff_;
-    self->_last_diff_ = filtered;
+    float out = 0.0f;
+
+    /* 比例项 */
+    if(mode & PID_MODE_P) {
+        out += pid->kp_ * err;
+    }
 
     /* 积分项 */
-    self->_integral_ += err * dt_s;
-    self->_integral_ = CONSTRAIN(self->_integral_, -self->_int_limit_, self->_int_limit_);
-    if(self->_int_threshold_ > 0.0f) {
-        if(err > self->_int_threshold_ || err < -self->_int_threshold_)
-            self->_integral_ = 0.0f;
+    if(mode & PID_MODE_I) {
+        uint8_t allow_integral = 1;
+        uint8_t allow_separation = 0;
+
+        /* 积分抗饱和 : 条件积分法 (输出饱和且误差同向时禁止积分) */
+        if(feat & PID_FEAT_ANTI_WINDUP) {
+            if(pid->_prev_output_ >= pid->max_out_ && err > 0.0f) allow_integral = 0;
+            if(pid->_prev_output_ <= -pid->max_out_ && err < 0.0f) allow_integral = 0;
+        }
+
+        if(allow_integral) {
+            pid->integral_ += (dt_s > 0.0f) ? (err * dt_s) : err;
+        }
+
+        /* 积分分离 (误差过大时不叠加积分输出) */
+        if(feat & PID_FEAT_INTEGRAL_SEP) {
+            if(PID_ABS(err) > pid->integral_separation_) {
+                allow_separation = 1;
+            }
+        }
+
+        if(!allow_separation) {
+            out += pid->ki_ * pid->integral_;
+        }
     }
 
-    /* PID 输出 */
-    self->_output_ = self->_p_ * err
-        + self->_i_ * self->_integral_
-        + self->_d_ * filtered;
-    self->_output_ = CONSTRAIN(self->_output_, -self->_out_limit_, self->_out_limit_);
-    return self->_output_;
+    /* 微分项 */
+    if(mode & PID_MODE_D) {
+        float diff;
+
+        /* 微分先行: 基于测量值变化率, 避免目标突变时 D 项跳变 */
+        if(feat & PID_FEAT_DIFF_ON_MEAS) {
+            diff = (dt_s > 0.0f) ? (-(actual - pid->_prev_measurement_) / dt_s) : 0.0f;
+            pid->_prev_measurement_ = actual;
+        }
+        else {
+            diff = (dt_s > 0.0f) ? ((err - pid->prev_err_) / dt_s) : 0.0f;
+            pid->prev_err_ = err;
+        }
+
+        /* 微分滤波: 一阶低通 */
+        if(feat & PID_FEAT_DIFF_FILTER) {
+            diff = pid->diff_filter_alpha_ * diff
+                + (1.0f - pid->diff_filter_alpha_) * pid->_filtered_diff_;
+            pid->_filtered_diff_ = diff;
+        }
+
+        out += pid->kd_ * diff;
+    }
+
+    /* 前馈 */
+    if(feat & PID_FEAT_FEEDFORWARD) {
+        out += pid->ff_value_;
+    }
+
+    /* 保存未限幅输出, 用于反计算法抗饱和 */
+    float total_output = out;
+
+    /* 输出限幅 */
+    if(feat & PID_FEAT_OUTPUT_LIMIT) {
+        out = PID_CLAMP(out, -pid->max_out_, pid->max_out_);
+    }
+
+    /* 输出变化率限制 */
+    if(feat & PID_FEAT_OUTPUT_RATE_LIMIT) {
+        if(dt_s > 0.0f) {
+            float max_change = pid->output_max_rate_ * dt_s;
+            float delta = out - pid->_prev_output_;
+            if(PID_ABS(delta) > max_change) {
+                out = pid->_prev_output_ + (delta > 0.0f ? max_change : -max_change);
+            }
+        }
+    }
+
+    /* 积分抗饱和 : 反计算法 (back-calculation) */
+    if((mode & PID_MODE_I) && (feat & PID_FEAT_ANTI_WINDUP) && (feat & PID_FEAT_OUTPUT_LIMIT)) {
+        float output_diff = total_output - out;
+        if(PID_ABS(pid->kp_) > 1e-6f && PID_ABS(pid->ki_) > 1e-6f) {
+            float Kb = pid->ki_ / pid->kp_;  /* Kb = 1/Tt = Ki/Kp */
+            pid->integral_ -= output_diff * Kb * dt_s;
+        }
+    }
+
+    pid->output_ = out;
+    pid->_prev_output_ = out;
+
+    return out;
+}
+
+/**
+ * @brief   重置 PID 控制器状态 (不改变参数)
+ */
+void _reset(PID* pid) {
+    pid->output_ = 0.0f;
+    pid->integral_ = 0.0f;
+    pid->prev_err_ = 0.0f;
+    pid->_filtered_diff_ = 0.0f;
+    pid->_prev_output_ = 0.0f;
+    pid->_prev_measurement_ = 0.0f;
 }
