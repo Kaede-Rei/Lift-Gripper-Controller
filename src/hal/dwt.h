@@ -7,6 +7,7 @@
 
 #include "stm32f10x.h"
 #include <stdint.h>
+#include <stdbool.h>
 
 // ! ========================= 接 口 变 量 / Typedef 声 明 ========================= ! //
 
@@ -35,10 +36,12 @@ typedef struct {
 #define CoreDebug_DEMCR_TRCENA_Msk  (1UL << 24)
 #endif
 
+typedef uint32_t us_t;
+
 // ! ========================= 接 口 函 数 声 明 ========================= ! //
 
 void dwt_init(void);
-uint32_t dwt_get_us(void);
-uint8_t dwt_is_timeout(uint32_t start, uint32_t timeout_us);
+us_t dwt_get_us(void);
+bool dwt_is_timeout(us_t start, us_t timeout_us);
 
 #endif

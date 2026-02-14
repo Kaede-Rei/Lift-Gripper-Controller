@@ -43,15 +43,16 @@ static const tim_cfg_t tick_cfg = {
     .nvic_sub = 1,
 };
 
-can_t    can;
-usart_t  usart1;
-usart_t  usart2;
-tim_t    tick;
-Encoder      encoder;
-LiftMotor    lift_motor;
-Gripper      gripper;
-Comms        comms;
-LiftControl  lift_ctrl;
+can_t can;
+usart_t usart1;
+usart_t usart2;
+tim_t tick;
+
+Encoder encoder;
+LiftMotor lift_motor;
+Gripper gripper;
+Comms comms;
+LiftControl lift_ctrl;
 
 // ! ========================= 私 有 函 数 声 明 ========================= ! //
 
@@ -90,6 +91,7 @@ void a_board_init(void) {
     gripper.init(&gripper, &usart2);
 
     /* 服务初始化 */
+    s_delay_init(systick_get_ms, systick_is_timeout, dwt_get_us, dwt_is_timeout);
     comms.init(&comms, &usart1, &lift_ctrl, &gripper);
     lift_ctrl.init(&lift_ctrl, &encoder, &lift_motor);
 

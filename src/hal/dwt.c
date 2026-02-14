@@ -29,9 +29,9 @@ void dwt_init(void) {
 /**
  * @brief   获取系统运行微秒数
  * @param   None
- * @retval  uint32_t 微秒数
+ * @retval  us_t 微秒数
  */
-uint32_t dwt_get_us(void) {
+us_t dwt_get_us(void) {
     return DWT->CYCCNT / CPU_FREQ_MHZ;
 }
 
@@ -39,14 +39,14 @@ uint32_t dwt_get_us(void) {
  * @brief   检查是否超时 (微秒)
  * @param   start 起始时间
  * @param   timeout_us 超时时间
- * @retval  uint8_t 1:超时, 0:未超时
+ * @retval  bool true:超时, false:未超时
  */
-uint8_t dwt_is_timeout(uint32_t start, uint32_t timeout_us) {
-    uint32_t now = dwt_get_us();
+bool dwt_is_timeout(us_t start, us_t timeout_us) {
+    us_t now = dwt_get_us();
     if(now >= start)
-        return (now - start) >= timeout_us ? 1 : 0;
+        return (now - start) >= timeout_us ? true : false;
     else
-        return ((0xFFFFFFFFU - start) + now + 1) >= timeout_us ? 1 : 0;
+        return ((0xFFFFFFFFU - start) + now + 1) >= timeout_us ? true : false;
 }
 
 // ! ========================= 私 有 函 数 实 现 ========================= ! //

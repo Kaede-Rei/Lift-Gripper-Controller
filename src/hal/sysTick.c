@@ -7,7 +7,7 @@
 
 // ! ========================= 变 量 声 明 ========================= ! //
 
-static volatile systick_t _ms = 0;
+static volatile ms_t _ms = 0;
 
 // ! ========================= 私 有 函 数 声 明 ========================= ! //
 
@@ -29,18 +29,18 @@ void systick_init(void) {
 /**
  * @brief   获取毫秒级系统时间
  * @param   None
- * @retval  systick_t 毫秒数
+ * @retval  ms_t 毫秒数
  */
-systick_t systick_get_ms(void) {
+ms_t systick_get_ms(void) {
     return _ms;
 }
 
 /**
  * @brief   获取秒级系统时间
  * @param   None
- * @retval  systick_t 秒数
+ * @retval  ms_t 秒数
  */
-systick_t systick_get_s(void) {
+ms_t systick_get_s(void) {
     return _ms / 1000;
 }
 
@@ -48,14 +48,14 @@ systick_t systick_get_s(void) {
  * @brief   检查是否超时 (毫秒)
  * @param   start 起始时间
  * @param   timeout_ms 超时时间
- * @retval  uint8_t 1:超时, 0:未超时
+ * @retval  bool true:超时, false:未超时
  */
-uint8_t systick_is_timeout(systick_t start, uint32_t timeout_ms) {
-    systick_t now = _ms;
+bool systick_is_timeout(ms_t start, ms_t timeout_ms) {
+    ms_t now = _ms;
     if(now >= start)
-        return (now - start) >= timeout_ms ? 1 : 0;
+        return (now - start) >= timeout_ms ? true : false;
     else
-        return ((0xFFFFFFFFU - start) + now + 1) >= timeout_ms ? 1 : 0;
+        return ((0xFFFFFFFFU - start) + now + 1) >= timeout_ms ? true : false;
 }
 
 /**

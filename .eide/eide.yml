@@ -88,10 +88,10 @@ targets:
         - lib/Start
         - lib/User
         - RTE/_Target 1
-        - src/apl
-        - src/drvl
+        - src/app
+        - src/driver
         - src/hal
-        - src/srvl
+        - src/service
         - src
       libList: []
     excludeList: []
