@@ -1,6 +1,6 @@
 /**
  * @file  d_encoder.h
- * @brief 编码器驱动 (OOP 封装)
+ * @brief 编码器驱动
  *        TIM2 编码器模式, PA0=CH1, PA1=CH2
  *        读取脉冲并换算为毫米位移与速度
  */
@@ -8,6 +8,8 @@
 #define _d_encoder_h_
 
 #include "stm32f10x.h"
+#include "timer.h"
+
 #include <stdint.h>
 
 // ! ========================= 接 口 变 量 / Typedef 声 明 ========================= ! //
@@ -20,7 +22,7 @@ struct Encoder {
      * @param   self 编码器对象
      * @retval  None
      */
-    void(*init)(Encoder* self);
+    void(*init)(Encoder* self, const tim_cfg_t* cfg, int period_ms);
     /**
      * @brief   更新编码器数据
      * @param   self 编码器对象
@@ -41,6 +43,9 @@ struct Encoder {
     int32_t(*get_speed)(const Encoder* self);
 
 // private:
+    tim_cfg_t _tim_cfg_;
+    int _period_ms_;
+
     int32_t _total_pulses_;
     int32_t _position_mm_;
     int32_t _speed_;

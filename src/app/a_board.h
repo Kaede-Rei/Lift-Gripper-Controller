@@ -26,7 +26,7 @@ extern usart_t usart1;
 extern usart_t usart2;
 extern tim_t tick;
 
-extern Encoder encoder;
+extern Encoder lift_encoder;
 extern LiftMotor lift_motor;
 extern Gripper gripper;
 extern Comms comms;

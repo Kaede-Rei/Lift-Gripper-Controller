@@ -1,6 +1,6 @@
 /**
  * @file  d_gripper.h
- * @brief 夹爪驱动 (OOP 封装)
+ * @brief 夹爪驱动
  *        通过 USART 向舵机发送 PWM 指令
  */
 #ifndef _d_gripper_h_

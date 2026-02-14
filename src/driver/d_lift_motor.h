@@ -1,6 +1,6 @@
 /**
  * @file  d_lift_motor.h
- * @brief 升降台电机驱动 (OOP 封装)
+ * @brief 升降台电机驱动
  *        PB0 / PB1 控制启停和方向
  */
 #ifndef _d_lift_motor_h_

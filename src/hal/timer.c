@@ -37,6 +37,8 @@ static tim_t* _handles[TIM_COUNT] = { 0 };
 
 // ! ========================= 私 有 函 数 声 明 ========================= ! //
 
+static void _gpio_init(GPIO_TypeDef* port, uint16_t pin, uint32_t rcc_mask,
+    uint8_t rcc_bus, GPIOMode_TypeDef mode);
 
 
 // ! ========================= 接 口 函 数 实 现 ========================= ! //
@@ -47,15 +49,21 @@ static tim_t* _handles[TIM_COUNT] = { 0 };
  * @param   cfg 配置表
  */
 void tim_init(tim_t* handle, const tim_cfg_t* cfg) {
-    handle->cfg = cfg;
-    handle->flag = 0;
-    handle->callback = 0;
+    if(!cfg) return;
 
     tim_id_e id = cfg->id;
     const tim_hw_t* hw = &_hw[id];
-    _handles[id] = handle;
 
-    /* 时钟使能 */
+    if(handle) {
+        handle->cfg = cfg;
+        handle->flag = 0;
+        handle->callback = 0;
+        _handles[id] = handle;
+    }
+    else {
+        _handles[id] = 0;
+    }
+
     if(hw->rcc_bus == 2)
         RCC_APB2PeriphClockCmd(hw->rcc_mask, ENABLE);
     else
@@ -63,7 +71,6 @@ void tim_init(tim_t* handle, const tim_cfg_t* cfg) {
 
     TIM_InternalClockConfig(hw->periph);
 
-    /* 时基 */
     TIM_TimeBaseInitTypeDef tb;
     tb.TIM_ClockDivision = TIM_CKD_DIV1;
     tb.TIM_CounterMode = TIM_CounterMode_Up;
@@ -72,16 +79,98 @@ void tim_init(tim_t* handle, const tim_cfg_t* cfg) {
     tb.TIM_RepetitionCounter = 0;
     TIM_TimeBaseInit(hw->periph, &tb);
 
-    TIM_ClearFlag(hw->periph, TIM_FLAG_Update);
-    TIM_ITConfig(hw->periph, TIM_IT_Update, ENABLE);
+    if(cfg->enable_irq && handle) {
+        TIM_ClearFlag(hw->periph, TIM_FLAG_Update);
+        TIM_ITConfig(hw->periph, TIM_IT_Update, ENABLE);
 
-    /* NVIC */
-    NVIC_InitTypeDef ni;
-    ni.NVIC_IRQChannel = hw->irqn;
-    ni.NVIC_IRQChannelCmd = ENABLE;
-    ni.NVIC_IRQChannelPreemptionPriority = cfg->nvic_preempt;
-    ni.NVIC_IRQChannelSubPriority = cfg->nvic_sub;
-    NVIC_Init(&ni);
+        NVIC_InitTypeDef ni;
+        ni.NVIC_IRQChannel = hw->irqn;
+        ni.NVIC_IRQChannelCmd = ENABLE;
+        ni.NVIC_IRQChannelPreemptionPriority = cfg->nvic_preempt;
+        ni.NVIC_IRQChannelSubPriority = cfg->nvic_sub;
+        NVIC_Init(&ni);
+    }
+    else {
+        TIM_ITConfig(hw->periph, TIM_IT_Update, DISABLE);
+    }
+
+    switch(cfg->mode) {
+        case TIM_MODE_BASE:
+            break;
+        case TIM_MODE_ENCODER: {
+            const tim_encoder_cfg_t* ecfg = &cfg->cfg.encoder;
+            _gpio_init(ecfg->ch1_port, ecfg->ch1_pin, ecfg->ch1_gpio_rcc_mask,
+                ecfg->ch1_gpio_rcc_bus, ecfg->gpio_mode);
+            _gpio_init(ecfg->ch2_port, ecfg->ch2_pin, ecfg->ch2_gpio_rcc_mask,
+                ecfg->ch2_gpio_rcc_bus, ecfg->gpio_mode);
+
+            TIM_ICInitTypeDef ic;
+            TIM_ICStructInit(&ic);
+            ic.TIM_ICFilter = ecfg->ic_filter;
+            ic.TIM_Channel = TIM_Channel_1;
+            ic.TIM_ICPolarity = ecfg->ic_polarity_ch1;
+            TIM_ICInit(hw->periph, &ic);
+
+            ic.TIM_Channel = TIM_Channel_2;
+            ic.TIM_ICPolarity = ecfg->ic_polarity_ch2;
+            TIM_ICInit(hw->periph, &ic);
+
+            TIM_EncoderInterfaceConfig(hw->periph, ecfg->encoder_mode,
+                ecfg->ic_polarity_ch1, ecfg->ic_polarity_ch2);
+            TIM_SetCounter(hw->periph, 0);
+            break;
+        }
+        case TIM_MODE_OC_PWM: {
+            const tim_oc_pwm_cfg_t* pcfg = &cfg->cfg.oc_pwm;
+            _gpio_init(pcfg->port, pcfg->pin, pcfg->gpio_rcc_mask,
+                pcfg->gpio_rcc_bus, pcfg->gpio_mode);
+
+            TIM_OCInitTypeDef oc;
+            TIM_OCStructInit(&oc);
+            oc.TIM_OCMode = pcfg->oc_mode;
+            oc.TIM_OutputState = pcfg->output_state;
+            oc.TIM_Pulse = pcfg->pulse;
+            oc.TIM_OCPolarity = pcfg->oc_polarity;
+
+            switch(pcfg->channel) {
+                case TIM_Channel_1: TIM_OC1Init(hw->periph, &oc); break;
+                case TIM_Channel_2: TIM_OC2Init(hw->periph, &oc); break;
+                case TIM_Channel_3: TIM_OC3Init(hw->periph, &oc); break;
+                case TIM_Channel_4: TIM_OC4Init(hw->periph, &oc); break;
+                default: break;
+            }
+
+            if(pcfg->preload) {
+                switch(pcfg->channel) {
+                    case TIM_Channel_1: TIM_OC1PreloadConfig(hw->periph, TIM_OCPreload_Enable); break;
+                    case TIM_Channel_2: TIM_OC2PreloadConfig(hw->periph, TIM_OCPreload_Enable); break;
+                    case TIM_Channel_3: TIM_OC3PreloadConfig(hw->periph, TIM_OCPreload_Enable); break;
+                    case TIM_Channel_4: TIM_OC4PreloadConfig(hw->periph, TIM_OCPreload_Enable); break;
+                    default: break;
+                }
+            }
+
+            TIM_ARRPreloadConfig(hw->periph, ENABLE);
+            break;
+        }
+        case TIM_MODE_IC: {
+            const tim_ic_cfg_t* icfg = &cfg->cfg.ic;
+            _gpio_init(icfg->port, icfg->pin, icfg->gpio_rcc_mask,
+                icfg->gpio_rcc_bus, icfg->gpio_mode);
+
+            TIM_ICInitTypeDef ic;
+            TIM_ICStructInit(&ic);
+            ic.TIM_Channel = icfg->channel;
+            ic.TIM_ICPolarity = icfg->ic_polarity;
+            ic.TIM_ICSelection = icfg->ic_selection;
+            ic.TIM_ICPrescaler = icfg->ic_prescaler;
+            ic.TIM_ICFilter = icfg->ic_filter;
+            TIM_ICInit(hw->periph, &ic);
+            break;
+        }
+        default:
+            break;
+    }
 
     TIM_Cmd(hw->periph, ENABLE);
 }
@@ -93,6 +182,29 @@ void tim_init(tim_t* handle, const tim_cfg_t* cfg) {
  */
 void tim_set_callback(tim_t* handle, tim_cb_t cb) {
     handle->callback = cb;
+}
+
+/**
+ * @brief   GPIO 初始化
+ * @param   port GPIO 端口
+ * @param   pin GPIO 引脚
+ * @param   rcc_mask RCC 时钟掩码
+ * @param   rcc_bus RCC 时钟总线 (1=APB1, 2=APB2)
+ * @param   mode GPIO 模式
+ * @note    由定时器初始化函数调用
+ */
+static void _gpio_init(GPIO_TypeDef* port, uint16_t pin, uint32_t rcc_mask,
+    uint8_t rcc_bus, GPIOMode_TypeDef mode) {
+    if(rcc_bus == 2)
+        RCC_APB2PeriphClockCmd(rcc_mask, ENABLE);
+    else
+        RCC_APB1PeriphClockCmd(rcc_mask, ENABLE);
+
+    GPIO_InitTypeDef gpio;
+    gpio.GPIO_Pin = pin;
+    gpio.GPIO_Speed = GPIO_Speed_50MHz;
+    gpio.GPIO_Mode = mode;
+    GPIO_Init(port, &gpio);
 }
 
 // ! ========================= 私 有 函 数 实 现 ========================= ! //

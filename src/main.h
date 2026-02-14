@@ -16,10 +16,6 @@
 #define USART1_BAUD             115200
 #define USART2_BAUD             115200
 
-/* ========================= 编码器参数 ========================= */
-#define ENCODER_PPR             1000
-#define ACTUAL_PULSE_PER_MM     15.518f
-
 /* ========================= 定时器节拍 ========================= */
 #define TICK_PERIOD_MS          10
 

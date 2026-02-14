@@ -1,6 +1,6 @@
 /**
  * @file  s_lift_control.h
- * @brief 升降台控制服务 (OOP 封装)
+ * @brief 升降台控制服务
  *        整合编码器反馈与电机控制
  */
 #ifndef _s_lift_control_h_

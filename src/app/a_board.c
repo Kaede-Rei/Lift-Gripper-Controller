@@ -6,6 +6,8 @@
 #include "a_board.h"
 #include "main.h"
 
+#include "timer.h"
+
 // ! ========================= 变 量 声 明 ========================= ! //
 
 static const can_cfg_t can_cfg = {
@@ -35,12 +37,42 @@ static const usart_cfg_t usart2_cfg = {
     .nvic_sub = 0,
 };
 
-static const tim_cfg_t tick_cfg = {
-    .id = TIM_3,
-    .prescaler = 720 - 1,
-    .period = 1000 - 1,    /* 72 MHz / 720 / 1000 = 10 ms */
-    .nvic_preempt = 1,
-    .nvic_sub = 1,
+static const tim_cfg_t tim_cfg_table[TIM_COUNT] = {
+    [TIM_2] = {
+        .id = TIM_2,
+        .periph = TIM2,
+        .mode = TIM_MODE_ENCODER,
+        .prescaler = 0,
+        .period = 65536 - 1,
+        .enable_irq = 0,
+        .nvic_preempt = 0,
+        .nvic_sub = 0,
+        .cfg.encoder = {
+            .ch1_port = GPIOA,
+            .ch1_pin = GPIO_Pin_0,
+            .ch1_gpio_rcc_mask = RCC_APB2Periph_GPIOA,
+            .ch1_gpio_rcc_bus = 2,
+            .ch2_port = GPIOA,
+            .ch2_pin = GPIO_Pin_1,
+            .ch2_gpio_rcc_mask = RCC_APB2Periph_GPIOA,
+            .ch2_gpio_rcc_bus = 2,
+            .gpio_mode = GPIO_Mode_IPU,
+            .ic_filter = 0x0F,
+            .ic_polarity_ch1 = TIM_ICPolarity_Rising,
+            .ic_polarity_ch2 = TIM_ICPolarity_Rising,
+            .encoder_mode = TIM_EncoderMode_TI12,
+        },
+    },
+    [TIM_3] = {
+        .id = TIM_3,
+        .periph = TIM3,
+        .mode = TIM_MODE_BASE,
+        .prescaler = 720 - 1,
+        .period = 1000 - 1,    /* 72 MHz / 720 / 1000 = 10 ms */
+        .enable_irq = 1,
+        .nvic_preempt = 1,
+        .nvic_sub = 1,
+    },
 };
 
 can_t can;
@@ -48,7 +80,7 @@ usart_t usart1;
 usart_t usart2;
 tim_t tick;
 
-Encoder encoder;
+Encoder lift_encoder;
 LiftMotor lift_motor;
 Gripper gripper;
 Comms comms;
@@ -73,7 +105,7 @@ void a_board_init(void) {
     dwt_init();
 
     /* 创建对象 */
-    encoder = encoder_create();
+    lift_encoder = encoder_create();
     lift_motor = lift_motor_create();
     gripper = gripper_create();
     comms = comms_create();
@@ -83,17 +115,17 @@ void a_board_init(void) {
     can_init(&can, &can_cfg);
     usart_init(&usart1, &usart1_cfg);
     usart_init(&usart2, &usart2_cfg);
-    tim_init(&tick, &tick_cfg);
+    tim_init(&tick, &tim_cfg_table[TIM_3]);
 
     /* 驱动初始化 */
-    encoder.init(&encoder);
+    lift_encoder.init(&lift_encoder, &tim_cfg_table[TIM_2], 10);
     lift_motor.init(&lift_motor);
     gripper.init(&gripper, &usart2);
 
     /* 服务初始化 */
     s_delay_init(systick_get_ms, systick_is_timeout, dwt_get_us, dwt_is_timeout);
     comms.init(&comms, &usart1, &lift_ctrl, &gripper);
-    lift_ctrl.init(&lift_ctrl, &encoder, &lift_motor);
+    lift_ctrl.init(&lift_ctrl, &lift_encoder, &lift_motor);
 
     s_delay_ms(1000);
     printf("Board initialized!\r\n");

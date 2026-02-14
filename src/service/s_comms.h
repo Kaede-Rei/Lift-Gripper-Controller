@@ -1,6 +1,6 @@
 /**
  * @file  s_comms.h
- * @brief 无线串口通信协议服务 (OOP 封装)
+ * @brief 无线串口通信协议服务
  *        通过 USART 接收工控机指令, 控制升降台与夹爪
  */
 #ifndef _s_comms_h_

@@ -1,0 +1,60 @@
+Date : 2026-02-14 16:07:45
+Directory : d:\Desktop\Learn\AgroTech\番茄樱桃采摘系统\下位机\STM32\src
+Total : 30 files,  1469 codes, 852 comments, 431 blanks, all 2752 lines
+
+Languages
++----------+------------+------------+------------+------------+------------+
+| language | files      | code       | comment    | blank      | total      |
++----------+------------+------------+------------+------------+------------+
+| C        |         16 |      1,081 |        533 |        296 |      1,910 |
+| C++      |         14 |        388 |        319 |        135 |        842 |
++----------+------------+------------+------------+------------+------------+
+
+Directories
++---------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| path                                                                      | files      | code       | comment    | blank      | total      |
++---------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| .                                                                         |         30 |      1,469 |        852 |        431 |      2,752 |
+| . (Files)                                                                 |          2 |         25 |         11 |         10 |         46 |
+| app                                                                       |          2 |         92 |         25 |         29 |        146 |
+| driver                                                                    |          6 |        176 |        202 |         68 |        446 |
+| hal                                                                       |         10 |        651 |        247 |        170 |      1,068 |
+| service                                                                   |         10 |        525 |        367 |        154 |      1,046 |
++---------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+
+Files
++---------------------------------------------------------------------------+----------+------------+------------+------------+------------+
+| filename                                                                  | language | code       | comment    | blank      | total      |
++---------------------------------------------------------------------------+----------+------------+------------+------------+------------+
+| d:\Desktop\Learn\AgroTech\番茄樱桃采摘系统\下位机\STM32\src\app\a_board.c            | C        |         66 |         19 |         21 |        106 |
+| d:\Desktop\Learn\AgroTech\番茄樱桃采摘系统\下位机\STM32\src\app\a_board.h            | C++      |         26 |          6 |          8 |         40 |
+| d:\Desktop\Learn\AgroTech\番茄樱桃采摘系统\下位机\STM32\src\driver\d_encoder.c       | C        |         47 |         40 |         16 |        103 |
+| d:\Desktop\Learn\AgroTech\番茄樱桃采摘系统\下位机\STM32\src\driver\d_encoder.h       | C++      |         16 |         30 |          8 |         54 |
+| d:\Desktop\Learn\AgroTech\番茄樱桃采摘系统\下位机\STM32\src\driver\d_gripper.c       | C        |         37 |         43 |         13 |         93 |
+| d:\Desktop\Learn\AgroTech\番茄樱桃采摘系统\下位机\STM32\src\driver\d_gripper.h       | C++      |         15 |         31 |          8 |         54 |
+| d:\Desktop\Learn\AgroTech\番茄樱桃采摘系统\下位机\STM32\src\driver\d_lift_motor.c    | C        |         45 |         34 |         15 |         94 |
+| d:\Desktop\Learn\AgroTech\番茄樱桃采摘系统\下位机\STM32\src\driver\d_lift_motor.h    | C++      |         16 |         24 |          8 |         48 |
+| d:\Desktop\Learn\AgroTech\番茄樱桃采摘系统\下位机\STM32\src\hal\can.c                | C        |        108 |         36 |         24 |        168 |
+| d:\Desktop\Learn\AgroTech\番茄樱桃采摘系统\下位机\STM32\src\hal\can.h                | C++      |         34 |         19 |         11 |         64 |
+| d:\Desktop\Learn\AgroTech\番茄樱桃采摘系统\下位机\STM32\src\hal\dwt.c                | C        |         17 |         24 |         14 |         55 |
+| d:\Desktop\Learn\AgroTech\番茄樱桃采摘系统\下位机\STM32\src\hal\dwt.h                | C++      |         31 |          6 |         11 |         48 |
+| d:\Desktop\Learn\AgroTech\番茄樱桃采摘系统\下位机\STM32\src\hal\systick.c            | C        |         23 |         35 |         15 |         73 |
+| d:\Desktop\Learn\AgroTech\番茄樱桃采摘系统\下位机\STM32\src\hal\systick.h            | C++      |         11 |          6 |          7 |         24 |
+| d:\Desktop\Learn\AgroTech\番茄樱桃采摘系统\下位机\STM32\src\hal\timer.c              | C        |        192 |         33 |         34 |        259 |
+| d:\Desktop\Learn\AgroTech\番茄樱桃采摘系统\下位机\STM32\src\hal\timer.h              | C++      |         81 |         28 |         15 |        124 |
+| d:\Desktop\Learn\AgroTech\番茄樱桃采摘系统\下位机\STM32\src\hal\usart.c              | C        |        125 |         43 |         28 |        196 |
+| d:\Desktop\Learn\AgroTech\番茄樱桃采摘系统\下位机\STM32\src\hal\usart.h              | C++      |         29 |         17 |         11 |         57 |
+| d:\Desktop\Learn\AgroTech\番茄樱桃采摘系统\下位机\STM32\src\main.c                   | C        |         11 |          4 |          4 |         19 |
+| d:\Desktop\Learn\AgroTech\番茄樱桃采摘系统\下位机\STM32\src\main.h                   | C        |         14 |          7 |          6 |         27 |
+| d:\Desktop\Learn\AgroTech\番茄樱桃采摘系统\下位机\STM32\src\service\s_comms.c        | C        |         82 |         39 |         17 |        138 |
+| d:\Desktop\Learn\AgroTech\番茄樱桃采摘系统\下位机\STM32\src\service\s_comms.h        | C++      |         20 |         22 |          9 |         51 |
+| d:\Desktop\Learn\AgroTech\番茄樱桃采摘系统\下位机\STM32\src\service\s_delay.c        | C        |         48 |         45 |         18 |        111 |
+| d:\Desktop\Learn\AgroTech\番茄樱桃采摘系统\下位机\STM32\src\service\s_delay.h        | C++      |         13 |          6 |          7 |         26 |
+| d:\Desktop\Learn\AgroTech\番茄樱桃采摘系统\下位机\STM32\src\service\s_lift_control.c | C        |         65 |         43 |         15 |        123 |
+| d:\Desktop\Learn\AgroTech\番茄樱桃采摘系统\下位机\STM32\src\service\s_lift_control.h | C++      |         20 |         33 |          8 |         61 |
+| d:\Desktop\Learn\AgroTech\番茄樱桃采摘系统\下位机\STM32\src\service\s_log.c          | C        |         53 |         32 |         14 |         99 |
+| d:\Desktop\Learn\AgroTech\番茄樱桃采摘系统\下位机\STM32\src\service\s_log.h          | C++      |         15 |          7 |          8 |         30 |
+| d:\Desktop\Learn\AgroTech\番茄樱桃采摘系统\下位机\STM32\src\service\s_pid.c          | C        |        148 |         56 |         42 |        246 |
+| d:\Desktop\Learn\AgroTech\番茄樱桃采摘系统\下位机\STM32\src\service\s_pid.h          | C++      |         61 |         84 |         16 |        161 |
+| Total                                                                     |          |      1,469 |        852 |        431 |      2,752 |
++---------------------------------------------------------------------------+----------+------------+------------+------------+------------+
