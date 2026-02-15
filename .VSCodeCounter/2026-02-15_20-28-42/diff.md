@@ -1,0 +1,22 @@
+# Diff Summary
+
+Date : 2026-02-15 20:28:42
+
+Directory d:\\Desktop\\Learn\\AgroTech\\番茄樱桃采摘系统\\下位机\\STM32\\src
+
+Total : 1 files,  13 codes, 7 comments, 4 blanks, all 24 lines
+
+[Summary](results.md) / [Details](details.md) / Diff Summary / [Diff Details](diff-details.md)
+
+## Languages
+| language | files | code | comment | blank | total |
+| :--- | ---: | ---: | ---: | ---: | ---: |
+| C | 1 | 13 | 7 | 4 | 24 |
+
+## Directories
+| path | files | code | comment | blank | total |
+| :--- | ---: | ---: | ---: | ---: | ---: |
+| . | 1 | 13 | 7 | 4 | 24 |
+| app | 1 | 13 | 7 | 4 | 24 |
+
+[Summary](results.md) / [Details](details.md) / Diff Summary / [Diff Details](diff-details.md)

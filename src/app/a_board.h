@@ -20,6 +20,8 @@
 #include "s_pid.h"
 #include "s_wireless_comms.h"
 
+#include "a_fsm.h"
+
 // ! ========================= 接 口 变 量 / Typedef 声 明 ========================= ! //
 
 extern can_t can;
