@@ -1,6 +1,6 @@
 /**
- * @file  s_log.c
- * @brief 日志输出服务实现
+ * @file    s_log.c
+ * @brief   日志输出服务实现
  */
 #include "s_log.h"
 

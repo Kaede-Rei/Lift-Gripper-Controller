@@ -1,6 +1,6 @@
 /**
- * @file  d_encoder.h
- * @brief 编码器驱动
+ * @file    d_encoder.h
+ * @brief   编码器驱动
  */
 #ifndef _d_encoder_h_
 #define _d_encoder_h_

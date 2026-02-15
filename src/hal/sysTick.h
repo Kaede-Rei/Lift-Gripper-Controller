@@ -1,6 +1,6 @@
 /**
- * @file  systick.h
- * @brief SysTick 1 ms 心跳计时
+ * @file    systick.h
+ * @brief   SysTick 1 ms 心跳计时
  */
 #ifndef _sysTick_h_
 #define _sysTick_h_

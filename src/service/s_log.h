@@ -1,6 +1,6 @@
 /**
- * @file  s_log.h
- * @brief 日志输出服务
+ * @file    s_log.h
+ * @brief   日志输出服务
  */
 #ifndef _s_log_h_
 #define _s_log_h_

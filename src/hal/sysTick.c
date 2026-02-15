@@ -1,7 +1,7 @@
 /**
- * @file  systick.c
- * @brief SysTick 1 ms 心跳实现
- *        72 MHz / 72000 = 1 kHz
+ * @file    systick.c
+ * @brief   SysTick 1 ms 心跳实现
+ *          72 MHz / 72000 = 1 kHz
  */
 #include "systick.h"
 

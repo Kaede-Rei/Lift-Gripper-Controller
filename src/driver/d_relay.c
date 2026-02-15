@@ -1,6 +1,6 @@
 /**
- * @file  d_relay.c
- * @brief 继电器驱动实现
+ * @file    d_relay.c
+ * @brief   继电器驱动实现
  */
 #include "d_relay.h"
 

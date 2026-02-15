@@ -1,7 +1,7 @@
 /**
- * @file  a_board.c
- * @brief 板级初始化实现
- *        按 HAL → DRVL → SRVL 顺序创建并初始化所有模块
+ * @file    a_board.c
+ * @brief   板级初始化实现
+ *          按 HAL → DRVL → SRVL 顺序创建并初始化所有模块
  */
 #include "a_board.h"
 

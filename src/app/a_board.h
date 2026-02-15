@@ -1,6 +1,6 @@
 /**
- * @file  a_board.h
- * @brief 板级初始化 — 汇总所有模块, 声明全局实例
+ * @file    a_board.h
+ * @brief   板级初始化 — 汇总所有模块, 声明全局实例
  */
 #ifndef _a_board_h_
 #define _a_board_h_

@@ -1,6 +1,6 @@
 /**
- * @file  s_pid.c
- * @brief PID 控制器实现
+ * @file    s_pid.c
+ * @brief   PID 控制器实现
  */
 #include "s_pid.h"
 

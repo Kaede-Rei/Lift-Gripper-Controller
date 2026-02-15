@@ -1,3 +1,18 @@
+/**
+ * @file    a_fsm.h
+ * @brief   有限状态机
+ * @note    本实现对应于 UML 状态机图中的以下状态层次：
+ *
+ * [UML State Machine Diagram]
+ * |
+ * ├──  NormalState (state_normal)
+ * |    |
+ * |    ├── IdleState (state_idle)
+ * |    └── LiftMovingState (state_lift_moving)
+ * |
+ * └──  ErrorState (state_error)
+ */
+
 #ifndef _a_fsm_h_
 #define _a_fsm_h_
 

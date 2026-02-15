@@ -1,6 +1,6 @@
 /**
- * @file  dwt.c
- * @brief DWT 微秒级计时器实现
+ * @file    dwt.c
+ * @brief   DWT 微秒级计时器实现
  */
 #include "dwt.h"
 

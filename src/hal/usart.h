@@ -1,7 +1,7 @@
 /**
- * @file  usart.h
- * @brief USART HAL — 配置表驱动
- *        支持 USART1 ~ USART3 (默认引脚, 无重映射)
+ * @file    usart.h
+ * @brief   USART HAL — 配置表驱动
+ *          支持 USART1 ~ USART3 (默认引脚, 无重映射)
  */
 #ifndef _usart_h_
 #define _usart_h_

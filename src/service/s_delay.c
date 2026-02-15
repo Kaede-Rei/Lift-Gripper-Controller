@@ -1,6 +1,6 @@
 /**
- * @file  s_delay.c
- * @brief 延时服务实现
+ * @file    s_delay.c
+ * @brief   延时服务实现
  */
 #include "s_delay.h"
 

@@ -1,6 +1,6 @@
 /**
- * @file  s_delay.h
- * @brief 延时服务 (阻塞 & 非阻塞)
+ * @file    s_delay.h
+ * @brief   延时服务 (阻塞 & 非阻塞)
  */
 #ifndef _s_delay_h_
 #define _s_delay_h_

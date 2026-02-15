@@ -1,11 +1,11 @@
 /**
- * @file  usart.c
- * @brief USART HAL 实现 — 配置表驱动
- *        根据 usart_cfg_t 自动适配 USART1 ~ USART3
- *        默认引脚:
- *          USART1: PA9-TX   PA10-RX
- *          USART2: PA2-TX   PA3-RX
- *          USART3: PB10-TX  PB11-RX
+ * @file    usart.c
+ * @brief   USART HAL 实现 — 配置表驱动
+ *          根据 usart_cfg_t 自动适配 USART1 ~ USART3
+ *          默认引脚:
+ *              USART1: PA9-TX   PA10-RX
+ *              USART2: PA2-TX   PA3-RX
+ *              USART3: PB10-TX  PB11-RX
  */
 #include "usart.h"
 #include <stdio.h>

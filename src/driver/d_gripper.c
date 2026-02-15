@@ -1,6 +1,6 @@
 /**
- * @file  d_gripper.c
- * @brief 二指夹爪驱动实现
+ * @file    d_gripper.c
+ * @brief   二指夹爪驱动实现
  */
 #include "d_gripper.h"
 #include <stdio.h>

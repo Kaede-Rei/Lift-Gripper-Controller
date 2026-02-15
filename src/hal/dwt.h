@@ -1,6 +1,6 @@
 /**
- * @file  dwt.h
- * @brief DWT 微秒级计时器
+ * @file    dwt.h
+ * @brief   DWT 微秒级计时器
  */
 #ifndef _dwt_h_
 #define _dwt_h_

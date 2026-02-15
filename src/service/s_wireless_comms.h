@@ -1,7 +1,7 @@
 /**
- * @file s_wireless_comms.h
- * @brief 无线通信服务接口
- *        升降台升降 + 夹爪开合
+ * @file    s_wireless_comms.h
+ * @brief   无线通信服务接口
+ *          升降台升降 + 夹爪开合
  */
 #ifndef _s_wireless_comms_h_
 #define _s_wireless_comms_h_

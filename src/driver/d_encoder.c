@@ -1,6 +1,6 @@
 /**
- * @file  d_encoder.c
- * @brief 编码器驱动实现
+ * @file    d_encoder.c
+ * @brief   编码器驱动实现
  */
 #include "d_encoder.h"
 #include "timer.h"

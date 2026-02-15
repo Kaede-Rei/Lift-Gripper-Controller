@@ -1,6 +1,6 @@
 /**
- * @file  d_relay.h
- * @brief 继电器驱动
+ * @file    d_relay.h
+ * @brief   继电器驱动
  */
 #ifndef _d_relay_h_
 #define _d_relay_h_

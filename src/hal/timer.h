@@ -1,7 +1,7 @@
 /**
- * @file  timer.h
- * @brief 通用定时器 HAL — 配置表驱动
- *        支持 TIM1 ~ TIM4 周期中断
+ * @file    timer.h
+ * @brief   通用定时器 HAL — 配置表驱动
+ *          支持 TIM1 ~ TIM4 周期中断
  */
 #ifndef _timer_h_
 #define _timer_h_

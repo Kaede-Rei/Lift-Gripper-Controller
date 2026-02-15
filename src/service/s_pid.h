@@ -1,30 +1,29 @@
 /**
- * @file  s_pid.h
- * @brief PID 控制器
- *        支持: 输出限幅, 积分分离, 死区, 微分滤波,
- *              微分先行, 积分抗饱和, 输出变化率限制, 前馈控制
+ * @file    s_pid.h
+ * @brief   PID 控制器
+ *          支持: 输出限幅, 积分分离, 死区, 微分滤波,
+ *                微分先行, 积分抗饱和, 输出变化率限制, 前馈控制
+ * @note
+ *          -------- 基础用法 --------
+ *          PID_t pid = pid_create();
+ *          pid.init(&pid, PID_MODE_PID, PID_FEAT_NONE);
+ *          pid.set_gains(&pid, 1.0f, 0.1f, 0.01f);
+ *          float out = pid.calculate(&pid, target, actual, dt_s);
  *
- * @usage
- *        -------- 基础用法 --------
- *        PID_t pid = pid_create();
- *        pid.init(&pid, PID_MODE_PID, PID_FEAT_NONE);
- *        pid.set_gains(&pid, 1.0f, 0.1f, 0.01f);
- *        float out = pid.calculate(&pid, target, actual, dt_s);
- *
- *        -------- 高级用法 (配置表) --------
- *        const PID_Cfg_t cfg = {
- *            .mode     = PID_MODE_PID,
- *            .features = PID_FEAT_OUTPUT_LIMIT | PID_FEAT_ANTI_WINDUP | PID_FEAT_DIFF_FILTER,
- *            .kp = 2.0f, .ki = 0.5f, .kd = 0.1f,
- *            .max_out            = 1000.0f,
- *            .integral_separation = 0.0f,
- *            .dead_band          = 0.0f,
- *            .diff_filter_alpha  = 0.3f,
- *            .output_max_rate    = 0.0f,
- *        };
- *        PID_t pid = pid_create();
- *        pid.init_cfg(&pid, &cfg);
- *        float out = pid.calculate(&pid, target, actual, dt_s);
+ *          -------- 高级用法 (配置表) --------
+ *          const PID_Cfg_t cfg = {
+ *              .mode     = PID_MODE_PID,
+ *              .features = PID_FEAT_OUTPUT_LIMIT | PID_FEAT_ANTI_WINDUP | PID_FEAT_DIFF_FILTER,
+ *              .kp = 2.0f, .ki = 0.5f, .kd = 0.1f,
+ *              .max_out            = 1000.0f,
+ *              .integral_separation = 0.0f,
+ *              .dead_band          = 0.0f,
+ *              .diff_filter_alpha  = 0.3f,
+ *              .output_max_rate    = 0.0f,
+ *          };
+ *          PID_t pid = pid_create();
+ *          pid.init_cfg(&pid, &cfg);
+ *          float out = pid.calculate(&pid, target, actual, dt_s);
  */
 #ifndef _s_pid_h_
 #define _s_pid_h_

@@ -1,7 +1,7 @@
 /**
- * @file s_wireless_comms.c
- * @brief 无线通信服务实现
- *        升降台升降 + 夹爪开合
+ * @file    s_wireless_comms.c
+ * @brief   无线通信服务实现
+ *          升降台升降 + 夹爪开合
  */
 #include "s_wireless_comms.h"
 

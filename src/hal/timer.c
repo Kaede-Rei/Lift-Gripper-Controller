@@ -1,7 +1,7 @@
 /**
- * @file  timer.c
- * @brief 通用定时器 HAL 实现 — 配置表驱动
- *        根据 tim_cfg_t 自动适配 TIM1 ~ TIM4
+ * @file    timer.c
+ * @brief   通用定时器 HAL 实现 — 配置表驱动
+ *          根据 tim_cfg_t 自动适配 TIM1 ~ TIM4
  */
 #include "timer.h"
 

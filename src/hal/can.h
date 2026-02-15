@@ -1,7 +1,7 @@
 /**
- * @file  can.h
- * @brief CAN HAL — 配置表驱动
- *        支持 CAN1 (STM32F103, PA11-RX  PA12-TX)
+ * @file    can.h
+ * @brief   CAN HAL — 配置表驱动
+ *          支持 CAN1 (STM32F103, PA11-RX  PA12-TX)
  */
 #ifndef _can_h_
 #define _can_h_

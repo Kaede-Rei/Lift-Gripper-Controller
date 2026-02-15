@@ -1,8 +1,8 @@
 /**
- * @file  can.c
- * @brief CAN HAL 实现 — 配置表驱动
- *        根据 can_cfg_t 自动适配 CAN
- *        默认引脚: PA12-TX  PA11-RX
+ * @file    can.c
+ * @brief   CAN HAL 实现 — 配置表驱动
+ *          根据 can_cfg_t 自动适配 CAN
+ *          默认引脚: PA12-TX  PA11-RX
  */
 #include "can.h"
 
