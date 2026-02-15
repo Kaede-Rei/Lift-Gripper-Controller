@@ -26,18 +26,25 @@
 
 ```text
 src/
-├── app/                  # 应用层
-│   ├── a_fsm.c/.h        # 有限状态机 (主要业务逻辑)
-│   └── a_board.c/.h      # 板级初始化 (硬件资源配置)
-├── driver/               # 驱动层
-│   ├── d_relay.c         # 继电器驱动 (控制升降台电机方向)
-│   ├── d_gripper.c       # 夹爪驱动 (CAN通信控制)
-│   └── d_encoder.c       # 编码器接口 (位置反馈)
-├── service/              # 服务层
-│   ├── s_wireless_comms.c # 无线/串口通信协议解析
-│   ├── s_pid.c           # PID 位置控制算法
-│   └── s_log.c           # 日志调试
-└── main.c                # 程序入口
+├── hal/                    # 硬件抽象层
+│   ├── can.c               # CAN 总线接口
+│   ├── dwt.c               # DWT 计时器接口
+│   ├── systick.c           # 系统滴答定时器接口
+│   ├── timer.c             # 定时器接口
+│   └── usart.c             # 串口通信接口
+├── driver/                 # 驱动层
+│   ├── d_relay.c           # 继电器驱动 (控制升降台电机方向)
+│   ├── d_gripper.c         # 夹爪驱动 (CAN通信控制)
+│   └── d_encoder.c         # 编码器接口 (位置反馈)
+├── service/                # 服务层
+│   ├── s_delay.c           # 阻塞/非阻塞延时服务
+│   ├── s_wireless_comms.c  # 无线/串口通信协议解析
+│   ├── s_pid.c             # PID 位置控制算法
+│   └── s_log.c             # 日志调试
+├── app/                    # 应用层
+│   ├── a_fsm.c/.h          # 有限状态机 (主要业务逻辑)
+│   └── a_board.c/.h        # 板级初始化 (硬件资源配置)
+└── main.c                  # 程序入口
 ```
 
 ## ⚙️ 功能模块说明

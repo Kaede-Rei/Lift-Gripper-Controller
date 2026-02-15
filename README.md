@@ -26,18 +26,25 @@ The project follows a layered architecture with low coupling:
 
 ```text
 src/
-├── app/                  # Application Layer
-│   ├── a_fsm.c/.h        # Finite State Machine (Core business logic)
-│   └── a_board.c/.h      # Board Initialization (Hardware resource config)
-├── driver/               # Driver Layer
-│   ├── d_relay.c         # Relay Driver (Lift motor direction control)
-│   ├── d_gripper.c       # Gripper Driver (CAN communication control)
-│   └── d_encoder.c       # Encoder Interface (Position feedback)
-├── service/              # Service Layer
-│   ├── s_wireless_comms.c # Wireless/Serial Communication Protocol Parsing
-│   ├── s_pid.c           # PID Position Control Algorithm
-│   └── s_log.c           # Logging & Debugging
-└── main.c                # Program Entry Point
+├── hal/                    # Hardware Abstraction Layer
+│   ├── can.c               # CAN bus interface
+│   ├── dwt.c               # DWT timer interface
+│   ├── systick.c           # SysTick timer interface
+│   ├── timer.c             # General timer interface
+│   └── usart.c             # USART communication interface
+├── driver/                 # Driver Layer
+│   ├── d_relay.c           # Relay driver (controls lift motor direction)
+│   ├── d_gripper.c         # Gripper driver (CAN communication control)
+│   └── d_encoder.c         # Encoder interface (position feedback)
+├── service/                # Service Layer
+│   ├── s_delay.c           # Blocking/non-blocking delay services
+│   ├── s_wireless_comms.c  # Wireless/serial communication protocol parsing
+│   ├── s_pid.c             # PID position control algorithm
+│   └── s_log.c             # Logging and debugging
+├── app/                    # Application Layer
+│   ├── a_fsm.c/.h          # Finite State Machine (main business logic)
+│   └── a_board.c/.h        # Board-level initialization (hardware resource configuration)
+└── main.c                  # Program entry point
 ```
 
 ## ⚙️ Functional Modules
