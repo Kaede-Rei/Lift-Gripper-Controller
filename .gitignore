@@ -13,3 +13,15 @@
 # eide template
 *.ept
 *.eide-template
+
+/.eide
+/DebugConfig
+/lib
+/Listings
+/Objects
+/RTE
+keilkill.bat
+Project.code-workspace
+Project.uvguix.Kaerei
+Project.uvoptx
+Project.uvprojx
