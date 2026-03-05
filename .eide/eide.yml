@@ -78,7 +78,7 @@ outDir: build
 miscInfo:
   uid: 4b34e17393db60334ca2943a3cbdb2e6
 targets:
-  Target 1:
+  Debug:
     cppPreprocessAttrs:
       defineList:
         - USE_STDPERIPH_DRIVER

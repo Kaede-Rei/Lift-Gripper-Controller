@@ -13,3 +13,8 @@
 # eide template
 *.ept
 *.eide-template
+
+.eide
+.vscode
+.VSCodeCounter
+Objects
