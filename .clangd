@@ -1,0 +1,36 @@
+CompileFlags:
+  Add:
+    - "-target"
+    - "arm-arm-none-eabi"
+    - "-isystem"
+    - "D:/Keil 5--C51/ARM/ARMCC/include"
+    - "-isystem"
+    - "D:/Keil 5--C51/ARM/ARMCLANG/include"
+    - "-fms-extensions"
+    - "-fdeclspec"
+    - "-fno-ms-compatibility"
+    - "-D__CC_ARM"
+    - "-D__arm__"
+    - "-D__align(x)=__attribute__((aligned(x)))"
+    - "-D__packed=__attribute__((packed))"
+    - "-D__irq=__attribute__((interrupt))"
+    - "-D__declspec(x)="
+  
+  Remove: 
+    - "-mthumb"
+    - "--cpu"
+    - "--cpu=*"
+    - "--apcs=*"
+    - "--li"
+    - "--c99"
+    - "--split_sections"
+    - "--no-multibyte-chars"
+    - "--no_depend_system_headers"
+    - "--depend=*"
+    - "--depend"
+    - "-O*"
+    - "--omf_browse=*"
+    - "-g"
+
+Index:
+  Background: Build

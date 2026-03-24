@@ -174,7 +174,7 @@ static State* find_lca(State* s1, State* s2) {
 
     State* deeper = depth1 > depth2 ? s1 : s2;
     State* shallower = depth1 > depth2 ? s2 : s1;
-    int diff = (int)fabs(depth1 - depth2);
+    int diff = (int)fabs((double)(depth1 - depth2));
 
     while(diff--) { deeper = deeper->_parent_; }
     while(deeper != shallower) {
